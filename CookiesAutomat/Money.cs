@@ -25,13 +25,41 @@ namespace CookiesAutomat
 
         }
 
-        public Money(int money=0)
+        public Money()
         {
             coins = new Dictionary<Coin, int>();
-            coins.Add(Coin.ONE, 0);
-            coins.Add(Coin.TWO, 0);
-            coins.Add(Coin.FIVE, 0);
-            coins.Add(Coin.TEN, 0);
+            //coins.Add(Coin.ONE, 0);
+            //coins.Add(Coin.TWO, 0);
+            //coins.Add(Coin.FIVE, 0);
+            //coins.Add(Coin.TEN, 0);
+        }
+
+        public void generateRandomCoins(int money = 0)
+        {
+            Random rnd = new Random();
+            int count = rnd.Next(0, (money + 1) / (int)Coin.TEN);
+            coins.Add(Coin.TEN, count);
+            money -= count* (int)Coin.TEN;
+
+            count = rnd.Next(0, (money + 1) / (int)Coin.FIVE);
+            coins.Add(Coin.FIVE, count);
+            money -= count*(int)Coin.FIVE;
+
+            count = rnd.Next(0, (money + 1) / (int)Coin.TWO);
+            coins.Add(Coin.TWO, count);
+            money -= count * (int)Coin.TWO;
+
+            coins.Add(Coin.ONE, money);
+        }
+
+        public override string ToString()
+        {
+            String s = "";
+            foreach(var coin in coins)
+            {
+                s += String.Format("\tCoin {0}: x{1}\n",coin.Key,coin.Value);
+            }
+            return s;
         }
     }
 }
