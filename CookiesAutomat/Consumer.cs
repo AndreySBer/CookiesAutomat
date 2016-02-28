@@ -26,8 +26,6 @@ namespace CookiesAutomat
             money.addCoins(coins);
         }
 
-        //public CookiesAutomat.menuItem ChooseMenuItem() { return 0; }
-
         public String Money
         {
             get { return money.ToString(); }

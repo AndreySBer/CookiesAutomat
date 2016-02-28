@@ -19,10 +19,6 @@ namespace CookiesAutomat
             this.count = count;
         }
 
-        public void Put(int count) { }
-
-        //public void Take(int count) { }
-
         public TakeResult Take(int count, ref int money) {
             if (money >= price * count)
             {
