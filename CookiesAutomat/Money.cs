@@ -1,21 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CookiesAutomat
 {
+    /// <summary>
+    /// Класс, представляющий модель хранения монет и действия над ними.
+    /// </summary>
     class Money
     {
+        /// <summary>
+        /// Перечисление, представлющее номиналы монет.
+        /// </summary>
         enum Coin
         {
             ONE = 1, TWO = 2, FIVE = 5, TEN = 10
         }
 
-        private Dictionary<Coin, int> coins;
+        private Dictionary<Coin, int> coins;//Словарь Номинал-Количество для хранения монет
 
-        public bool getCoin(int value)//to add check of value of coin on exsistance
+        /// <summary>
+        /// Метод, изымающий монету с номиналом value.
+        /// </summary>
+        /// <param name="value">Номинал монеты.</param>
+        /// <returns>Успех операции (false, если такой монеты нет).</returns>
+        public bool getCoin(int value)
         {
             Coin valueCoin = GetCoinByValue(value);
             if (coins.ContainsKey(valueCoin) && coins[valueCoin] > 0)
@@ -28,6 +37,11 @@ namespace CookiesAutomat
                 return false;
             }
         }
+        /// <summary>
+        /// Метод, изымающий монеты, переданные в качестве параметра.
+        /// Использование метода подразумевает наличие этих монет в данном экземпляре класса Money.
+        /// </summary>
+        /// <param name="money">Изымаемые монеты. Не изменяется.</param>
         public void removeCoins(Money money)
         {
             for (var i = 0; i < money.coins.Count; i++)
@@ -39,11 +53,20 @@ namespace CookiesAutomat
                 }
             }
         }
+
+        /// <summary>
+        /// Метод, добавляющий монету с номиналом value.
+        /// </summary>
+        /// <param name="value">Номинал монеты.</param>
         public void addCoin(int value)
         {
             Coin valueCoin = GetCoinByValue(value);
             coins[valueCoin]++;
         }
+        /// <summary>
+        /// Метод, добавляющий монеты, переданные в качестве параметра.
+        /// </summary>
+        /// <param name="money">Добавляемые монеты. Из экземпляра-параметра они удаляются.</param>
         public void addCoins(Money money)
         {
             for (var i = 0; i < money.coins.Count; i++)
@@ -56,12 +79,19 @@ namespace CookiesAutomat
                 }
             }
         }
-
-        private Coin GetCoinByValue(int value)
+        /// <summary>
+        /// Метод, возвращающий экземпляр перечисления по числовому значению номинала.
+        /// </summary>
+        /// <param name="value">Числовое значение номинала.</param>
+        /// <returns>Номинал-перечисление.</returns>
+        private static Coin GetCoinByValue(int value)
         {
             return (Coin)value;
         }
 
+        /// <summary>
+        /// Конструктор без параметров, инициализирующий количество монет значением 0.
+        /// </summary>
         public Money()//set value as 0
         {
             coins = new Dictionary<Coin, int>();
@@ -71,6 +101,10 @@ namespace CookiesAutomat
             coins.Add(Coin.TEN, 0);
         }
 
+        /// <summary>
+        /// Метод, случайно инициализирующий количество монет так, чтобы их стоимость равнялась значению параметра.
+        /// </summary>
+        /// <param name="money">Стоимость монет.</param>
         public void generateRandomCoins(int money = 0)
         {
             Random rnd = new Random();
@@ -89,6 +123,9 @@ namespace CookiesAutomat
             coins[Coin.ONE] = money;
         }
 
+        /// <summary>
+        /// Свойство-getter, возвращающий стоимость всех монет в экземпляре класса.
+        /// </summary>
         public int Sum
         {
             get
@@ -102,6 +139,13 @@ namespace CookiesAutomat
             }
         }
 
+        /// <summary>
+        /// Метод, набирающий сумму, равную или наиболее близкую из возможных к значению параметра из существующих монет.
+        /// Сначала для экономии времени используется алгоритм жадной упаковки, затем, в случае неуспеха,
+        /// алгоритм динамического программирования, обеспечивающий оптимальный результат.
+        /// </summary>
+        /// <param name="clientDeposit">Набираемая сумма.</param>
+        /// <returns>Список взятых монет.</returns>
         public Money getCoins(int clientDeposit)
         {
             Money result = new Money();
@@ -140,7 +184,12 @@ namespace CookiesAutomat
             }
             return result;
         }
-
+        /// <summary>
+        /// Метод, набирающий монеты стоимостью, наиболее близкой к deposit методом динамического программирования.
+        /// Используется в методе public Money getCoins(int clientDeposit).
+        /// </summary>
+        /// <param name="deposit">Набираемая сумма.</param>
+        /// <returns>Список взятых монет.</returns>
         private Money getCoinsDP(int deposit)
         {
             List<int> cs = CoinsDictToList(this.coins);
@@ -190,7 +239,12 @@ namespace CookiesAutomat
             }
             return result;
         }
-
+        /// <summary>
+        /// Вспомогательный метод для private Money getCoinsDP(int deposit).
+        /// Преобразует словарь, описывающий монеты в список.
+        /// </summary>
+        /// <param name="cs">Словарь, содержащий монеты.</param>
+        /// <returns>Список, содержащий номиналы монет кратно их количеству в словаре.</returns>
         private List<int> CoinsDictToList(Dictionary<Coin, int> cs)
         {
             List<int> result = new List<int>();
@@ -204,7 +258,10 @@ namespace CookiesAutomat
             }
             return result;
         }
-
+        /// <summary>
+        /// Метод, возвращающий количество монет каждого номинала и их общую стоимость.
+        /// </summary>
+        /// <returns>Строки с информацией о монетах.</returns>
         public override string ToString()
         {
             String s = "";
