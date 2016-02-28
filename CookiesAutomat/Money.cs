@@ -18,7 +18,7 @@ namespace CookiesAutomat
         public bool getCoin(int value)//to add check of value of coin on exsistance
         {
             Coin valueCoin = GetCoinByValue(value);
-            if (coins[valueCoin]>0)
+            if (coins.ContainsKey(valueCoin) && coins[valueCoin]>0)
             {
                 coins[valueCoin]--;
                 return true;
@@ -35,9 +35,9 @@ namespace CookiesAutomat
             coins[valueCoin]++;
         }
 
-        private Coin GetCoinByValue(int value) //throws some exceptions like "not found such coin"
+        private Coin GetCoinByValue(int value) 
         {
-            return (Coin)Enum.Parse(typeof(Coin), Enum.GetName(typeof(Coin), value));
+            return (Coin)value;
         }
 
         public Money()//set value as 0
@@ -69,6 +69,19 @@ namespace CookiesAutomat
 
             coins[Coin.ONE] = money;
             //coins.Add(Coin.ONE, money);
+        }
+
+        public int Sum
+        {
+            get
+            {
+                int sum = 0;
+                foreach (var i in coins)
+                {
+                    sum += i.Value * (int)i.Key;
+                }
+                return sum;
+            }
         }
 
         public override string ToString()

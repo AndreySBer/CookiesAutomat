@@ -21,8 +21,44 @@ namespace CookiesAutomat
 
         public void Put(int count) { }
 
-        public void Take(int count) { }
+        //public void Take(int count) { }
 
-        public bool Take(int count, int money) { return false; } 
+        public TakeResult Take(int count, ref int money) {
+            if (money >= price * count)
+            {
+                if (count <= this.count)
+                {
+                    money -= price * count;
+                    this.count -= count;
+                    return TakeResult.OK;
+                }
+                else//not enough products
+                {
+                    return TakeResult.NO_PRODUCT;
+                }
+            }
+            else
+            {
+                return TakeResult.NO_MONEY;
+            }
+        }
+
+        public enum TakeResult
+        {
+            OK, NO_MONEY, NO_PRODUCT
+        }
+
+        public int Price
+        {
+            get
+            {
+                return this.price;
+            }
+        }
+
+        public override string ToString()
+        {
+            return name;
+        }
     }
 }
