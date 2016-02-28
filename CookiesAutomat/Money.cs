@@ -15,41 +15,60 @@ namespace CookiesAutomat
 
         private Dictionary<Coin, int> coins;
 
-        public int getSumm()
+        public bool getCoin(int value)//to add check of value of coin on exsistance
         {
-            return 0;
+            Coin valueCoin = GetCoinByValue(value);
+            if (coins[valueCoin]>0)
+            {
+                coins[valueCoin]--;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public void addSumm(int summ)
+        public void addCoin(int value)
         {
-
+            Coin valueCoin = GetCoinByValue(value);
+            coins[valueCoin]++;
         }
 
-        public Money()
+        private Coin GetCoinByValue(int value) //throws some exceptions like "not found such coin"
+        {
+            return (Coin)Enum.Parse(typeof(Coin), Enum.GetName(typeof(Coin), value));
+        }
+
+        public Money()//set value as 0
         {
             coins = new Dictionary<Coin, int>();
-            //coins.Add(Coin.ONE, 0);
-            //coins.Add(Coin.TWO, 0);
-            //coins.Add(Coin.FIVE, 0);
-            //coins.Add(Coin.TEN, 0);
+            coins.Add(Coin.ONE, 0);
+            coins.Add(Coin.TWO, 0);
+            coins.Add(Coin.FIVE, 0);
+            coins.Add(Coin.TEN, 0);
         }
 
         public void generateRandomCoins(int money = 0)
         {
             Random rnd = new Random();
             int count = rnd.Next(0, (money + 1) / (int)Coin.TEN);
-            coins.Add(Coin.TEN, count);
+            coins[Coin.TEN] = count;
+            //coins.Add(Coin.TEN, count);
             money -= count* (int)Coin.TEN;
 
             count = rnd.Next(0, (money + 1) / (int)Coin.FIVE);
-            coins.Add(Coin.FIVE, count);
+            coins[Coin.FIVE] = count;
+            //coins.Add(Coin.FIVE, count);
             money -= count*(int)Coin.FIVE;
 
             count = rnd.Next(0, (money + 1) / (int)Coin.TWO);
-            coins.Add(Coin.TWO, count);
+            coins[Coin.TWO] = count;
+            //coins.Add(Coin.TWO, count);
             money -= count * (int)Coin.TWO;
 
-            coins.Add(Coin.ONE, money);
+            coins[Coin.ONE] = money;
+            //coins.Add(Coin.ONE, money);
         }
 
         public override string ToString()

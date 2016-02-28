@@ -16,13 +16,16 @@ namespace CookiesAutomat
             money.generateRandomCoins(150);
         }
 
-        public bool GiveMoney(int money) { return false; }
+        public bool GiveCoin(int value)
+        {
+            return money.getCoin(value);
+        }
 
         public CookiesAutomat.menuItem ChooseMenuItem() { return 0; }
 
-        public Money Money
+        public String Money
         {
-            get { return money; }
+            get { return money.ToString(); }
         }
     }
 }
