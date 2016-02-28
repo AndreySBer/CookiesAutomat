@@ -63,7 +63,7 @@ namespace CookiesAutomat
                     }
                 case '3':
                     {
-                        returnMoney();
+                        returnChange();
                         break;
                     }
                 default:
@@ -74,9 +74,25 @@ namespace CookiesAutomat
             }
         }
 
-        private static void returnMoney()
+        private static void returnChange()
         {
-            throw new NotImplementedException();
+            Money change = moneyInside.getCoins(clientDeposit);
+            int changeSum = change.Sum;
+            client.takeCoins(change);
+
+            if (changeSum < clientDeposit)
+            {
+                clientDeposit -= changeSum;
+
+                Console.WriteLine("Sorry, automat can not gather the necessary sum. Returned {0} roubles. Credit {1} roubles.",
+                    changeSum, clientDeposit);
+
+            }
+            else
+            {
+                clientDeposit -= changeSum;
+                Console.WriteLine("All change returned succesfully.");
+            }
         }
 
         private static void suggestCookie()
@@ -87,8 +103,8 @@ namespace CookiesAutomat
                 Console.WriteLine("\t{0} - {1} ~ {2} rub", i, cookies[i], cookies[i].Price);
             }
 
-            int value= Console.ReadKey(true).KeyChar-'0';
-            if (value >= 0 && value < cookies.Count) 
+            int value = Console.ReadKey(true).KeyChar - '0';
+            if (value >= 0 && value < cookies.Count)
             //if (int.TryParse(Console.ReadLine(), out value) && value >= 0 && value < cookies.Count)
 
             {

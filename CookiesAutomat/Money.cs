@@ -10,7 +10,7 @@ namespace CookiesAutomat
     {
         enum Coin
         {
-            ONE=1,TWO=2,FIVE=5,TEN=10
+            ONE = 1, TWO = 2, FIVE = 5, TEN = 10
         }
 
         private Dictionary<Coin, int> coins;
@@ -18,7 +18,7 @@ namespace CookiesAutomat
         public bool getCoin(int value)//to add check of value of coin on exsistance
         {
             Coin valueCoin = GetCoinByValue(value);
-            if (coins.ContainsKey(valueCoin) && coins[valueCoin]>0)
+            if (coins.ContainsKey(valueCoin) && coins[valueCoin] > 0)
             {
                 coins[valueCoin]--;
                 return true;
@@ -34,8 +34,20 @@ namespace CookiesAutomat
             Coin valueCoin = GetCoinByValue(value);
             coins[valueCoin]++;
         }
+        public void addCoins(Money money)
+        {
+            for (var i = 0; i < money.coins.Count; i++)
+            {
+                Coin key = money.coins.Keys.ToArray()[i];
+                while (money.coins[key] > 0)
+                {
+                    addCoin((int)key);
+                    money.coins[key]--;
+                }
+            }
+        }
 
-        private Coin GetCoinByValue(int value) 
+        private Coin GetCoinByValue(int value)
         {
             return (Coin)value;
         }
@@ -54,21 +66,17 @@ namespace CookiesAutomat
             Random rnd = new Random();
             int count = rnd.Next(0, (money + 1) / (int)Coin.TEN);
             coins[Coin.TEN] = count;
-            //coins.Add(Coin.TEN, count);
-            money -= count* (int)Coin.TEN;
+            money -= count * (int)Coin.TEN;
 
             count = rnd.Next(0, (money + 1) / (int)Coin.FIVE);
             coins[Coin.FIVE] = count;
-            //coins.Add(Coin.FIVE, count);
-            money -= count*(int)Coin.FIVE;
+            money -= count * (int)Coin.FIVE;
 
             count = rnd.Next(0, (money + 1) / (int)Coin.TWO);
             coins[Coin.TWO] = count;
-            //coins.Add(Coin.TWO, count);
             money -= count * (int)Coin.TWO;
 
             coins[Coin.ONE] = money;
-            //coins.Add(Coin.ONE, money);
         }
 
         public int Sum
@@ -84,12 +92,38 @@ namespace CookiesAutomat
             }
         }
 
+        public Money getCoins(int clientDeposit)
+        {
+            Money result = new Money();
+            while (clientDeposit >= (int)Coin.TEN && getCoin((int)Coin.TEN))
+            {
+                clientDeposit -= (int)Coin.TEN;
+                result.addCoin((int)Coin.TEN);
+            }
+            while (clientDeposit >= (int)Coin.FIVE && getCoin((int)Coin.FIVE))
+            {
+                clientDeposit -= (int)Coin.FIVE;
+                result.addCoin((int)Coin.FIVE);
+            }
+            while (clientDeposit >= (int)Coin.TWO && getCoin((int)Coin.TWO))
+            {
+                clientDeposit -= (int)Coin.TWO;
+                result.addCoin((int)Coin.TWO);
+            }
+            while (clientDeposit >= (int)Coin.ONE && getCoin((int)Coin.ONE))
+            {
+                clientDeposit -= (int)Coin.ONE;
+                result.addCoin((int)Coin.ONE);
+            }
+            return result;
+        }
+
         public override string ToString()
         {
             String s = "";
-            foreach(var coin in coins)
+            foreach (var coin in coins)
             {
-                s += String.Format("\tCoin {0}: x{1}\n",coin.Key,coin.Value);
+                s += String.Format("\tCoin {0}: x{1}\n", coin.Key, coin.Value);
             }
             return s;
         }

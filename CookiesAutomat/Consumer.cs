@@ -21,7 +21,12 @@ namespace CookiesAutomat
             return money.getCoin(value);
         }
 
-        public CookiesAutomat.menuItem ChooseMenuItem() { return 0; }
+        public void takeCoins(Money coins)
+        {
+            money.addCoins(coins);
+        }
+
+        //public CookiesAutomat.menuItem ChooseMenuItem() { return 0; }
 
         public String Money
         {
